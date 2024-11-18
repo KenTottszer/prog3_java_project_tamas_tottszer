@@ -2,6 +2,7 @@ package com.recipebook.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import com.recipebook.Recipe;
 import com.recipebook.RecipeManager;
 import com.recipebook.RecipeSerialiser;
 
@@ -14,7 +15,7 @@ public class MainFrame extends JFrame {
         this.recipeManager = manager;
         setTitle("Digital Recipe Book");
         setSize(800, 600);
-        setMinimumSize(new Dimension(800, 600)); // Set minimum window size
+        setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -22,28 +23,34 @@ public class MainFrame extends JFrame {
         recipePanel = new RecipePanel();
         searchPanel = new SearchPanel(recipeManager, recipePanel);
 
-        recipePanel.setMinimumSize(new Dimension(300, 600)); // Minimum width for RecipePanel
-        searchPanel.setMinimumSize(new Dimension(300, 600)); // Minimum width for SearchPanel
+        recipePanel.setMinimumSize(new Dimension(300, 600));
+        searchPanel.setMinimumSize(new Dimension(300, 600));
 
-        // Use JSplitPane for even distribution
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, recipePanel, searchPanel);
-        splitPane.setResizeWeight(0.65); // Default resizing behavior
+        splitPane.setResizeWeight(0.65); // Set resizing weight
         add(splitPane, BorderLayout.CENTER);
 
-        // Set initial divider location dynamically after the frame is packed
+        // Dynamically set divider location after rendering
         SwingUtilities.invokeLater(() -> {
-            int frameWidth = getWidth();
-            splitPane.setDividerLocation((int) (frameWidth * 0.65)); // 65% of the current frame width
+            splitPane.setDividerLocation((int) (getWidth() * 0.65)); // Set divider to 65% of frame width
         });
 
-        // Create custom bottom toolbar
+        // Bottom toolbar with buttons
         JPanel bottomToolbar = new JPanel(new GridBagLayout());
-        bottomToolbar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        bottomToolbar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottomToolbar.setBackground(Color.LIGHT_GRAY);
 
         JButton addRecipeButton = new JButton("Add Recipe");
         addRecipeButton.setPreferredSize(new Dimension(150, 40));
         addRecipeButton.addActionListener(e -> openAddRecipeDialog());
+
+        JButton editRecipeButton = new JButton("Edit Recipe");
+        editRecipeButton.setPreferredSize(new Dimension(150, 40));
+        editRecipeButton.addActionListener(e -> openEditRecipeDialog());
+
+        JButton deleteRecipeButton = new JButton("Delete Recipe");
+        deleteRecipeButton.setPreferredSize(new Dimension(150, 40));
+        deleteRecipeButton.addActionListener(e -> deleteSelectedRecipe());
 
         JButton saveRecipesButton = new JButton("Save Recipes");
         saveRecipesButton.setPreferredSize(new Dimension(150, 40));
@@ -55,11 +62,16 @@ public class MainFrame extends JFrame {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
+
         gbc.gridx = 0;
         bottomToolbar.add(addRecipeButton, gbc);
         gbc.gridx = 1;
-        bottomToolbar.add(saveRecipesButton, gbc);
+        bottomToolbar.add(editRecipeButton, gbc);
         gbc.gridx = 2;
+        bottomToolbar.add(deleteRecipeButton, gbc);
+        gbc.gridx = 3;
+        bottomToolbar.add(saveRecipesButton, gbc);
+        gbc.gridx = 4;
         bottomToolbar.add(exitButton, gbc);
 
         add(bottomToolbar, BorderLayout.SOUTH);
@@ -71,6 +83,41 @@ public class MainFrame extends JFrame {
         AddRecipeDialog dialog = new AddRecipeDialog(this, recipeManager);
         dialog.setVisible(true);
         recipePanel.refresh();
+    }
+
+    private void openEditRecipeDialog() {
+        String selectedRecipeName = recipePanel.getSelectedRecipeName();
+        if (selectedRecipeName == null) {
+            JOptionPane.showMessageDialog(this, "Please select a recipe to edit.", "Edit Recipe", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Recipe selectedRecipe = recipeManager.getRecipe(selectedRecipeName);
+        if (selectedRecipe != null) {
+            EditRecipeDialog dialog = new EditRecipeDialog(this, recipeManager, selectedRecipe);
+            dialog.setVisible(true);
+
+            // Update search panel and recipe panel dynamically
+            String updatedRecipeName = selectedRecipe.getName();
+            searchPanel.updateRecipeInResults(selectedRecipeName, updatedRecipeName);
+            recipePanel.displayRecipe(selectedRecipe);
+        }
+    }
+
+    private void deleteSelectedRecipe() {
+        String selectedRecipeName = recipePanel.getSelectedRecipeName();
+        if (selectedRecipeName == null) {
+            JOptionPane.showMessageDialog(this, "Please select a recipe to delete.", "Delete Recipe", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            recipeManager.deleteRecipe(selectedRecipeName);
+            searchPanel.removeRecipeFromResults(selectedRecipeName); // Remove from SearchPanel dynamically
+            recipePanel.refresh();
+            JOptionPane.showMessageDialog(this, "Recipe deleted successfully.", "Delete Recipe", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private void saveRecipes() {

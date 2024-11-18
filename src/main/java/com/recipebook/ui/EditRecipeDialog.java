@@ -7,9 +7,9 @@ import com.recipebook.Recipe;
 import com.recipebook.RecipeManager;
 import java.util.List;
 
-public class AddRecipeDialog extends JDialog {
-    public AddRecipeDialog(JFrame parent, RecipeManager manager) {
-        super(parent, "Add Recipe", true);
+public class EditRecipeDialog extends JDialog {
+    public EditRecipeDialog(JFrame parent, RecipeManager manager, Recipe recipe) {
+        super(parent, "Edit Recipe", true);
 
         // Set size dynamically based on screen dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -26,10 +26,10 @@ public class AddRecipeDialog extends JDialog {
         JPanel contentPanel = new JPanel(new GridLayout(5, 2, 10, 10)); // Add spacing between rows and columns
         contentPanel.setBorder(new EmptyBorder(15, 15, 15, 15)); // Add padding around the panel
 
-        JTextField nameField = new JTextField();
-        JTextArea ingredientsArea = new JTextArea();
-        JTextArea instructionsArea = new JTextArea();
-        JTextField tagsField = new JTextField();
+        JTextField nameField = new JTextField(recipe.getName());
+        JTextArea ingredientsArea = new JTextArea(String.join(",", recipe.getIngredients()));
+        JTextArea instructionsArea = new JTextArea(recipe.getInstructions());
+        JTextField tagsField = new JTextField(String.join(",", recipe.getTags()));
 
         contentPanel.add(new JLabel("Name:"));
         contentPanel.add(nameField);
@@ -42,13 +42,12 @@ public class AddRecipeDialog extends JDialog {
 
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
-            String name = nameField.getText();
-            List<String> ingredients = List.of(ingredientsArea.getText().split(","));
-            String instructions = instructionsArea.getText();
-            List<String> tags = List.of(tagsField.getText().split(","));
+            recipe.setName(nameField.getText());
+            recipe.setIngredients(List.of(ingredientsArea.getText().split(",")));
+            recipe.setInstructions(instructionsArea.getText());
+            recipe.setTags(List.of(tagsField.getText().split(",")));
 
-            Recipe recipe = new Recipe(name, ingredients, instructions, tags);
-            manager.addRecipe(recipe);
+            manager.updateRecipe(recipe);
             dispose();
         });
 

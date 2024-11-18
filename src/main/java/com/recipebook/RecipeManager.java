@@ -25,6 +25,15 @@ public class RecipeManager {
                       .orElse(null);
     }
 
+    public void updateRecipe(Recipe updatedRecipe) {
+        for (int i = 0; i < recipes.size(); i++) {
+            if (recipes.get(i).getName().equalsIgnoreCase(updatedRecipe.getName())) {
+                recipes.set(i, updatedRecipe);
+                return;
+            }
+        }
+    }
+
     public List<Recipe> getAllRecipes() {
         return recipes;
     }

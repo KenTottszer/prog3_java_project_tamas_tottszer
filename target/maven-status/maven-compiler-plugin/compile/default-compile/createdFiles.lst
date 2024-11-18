@@ -5,5 +5,6 @@ com/recipebook/RecipeSerialiser.class
 com/recipebook/RecipeManager.class
 com/recipebook/ui/SearchPanel.class
 com/recipebook/Recipe.class
+com/recipebook/ui/EditRecipeDialog.class
 com/recipebook/ui/RecipePanel.class
 com/recipebook/RecipeBook.class

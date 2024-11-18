@@ -7,36 +7,34 @@ import com.recipebook.Recipe;
 import com.recipebook.RecipeManager;
 
 public class SearchPanel extends JPanel {
+    private JList<String> resultList;
+    private DefaultListModel<String> listModel;
+
     public SearchPanel(RecipeManager manager, RecipePanel recipePanel) {
         setLayout(new BorderLayout());
 
-        // Create the top panel for search field and button
         JPanel searchTopPanel = new JPanel(new BorderLayout());
         JTextField searchField = new JTextField();
         JButton searchButton = new JButton("Search");
 
-        // Add search field and button to the top panel
         searchTopPanel.add(searchField, BorderLayout.CENTER);
         searchTopPanel.add(searchButton, BorderLayout.EAST);
 
-        // Result list
-        JList<String> resultList = new JList<>();
+        listModel = new DefaultListModel<>();
+        resultList = new JList<>(listModel);
         resultList.setLayoutOrientation(JList.VERTICAL);
-        resultList.setFixedCellWidth(-1); // Allow list cells to wrap
 
         JScrollPane scrollPane = new JScrollPane(resultList);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER); // Disable horizontal scrolling
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // Search button action
         searchButton.addActionListener(e -> {
             String query = searchField.getText();
             List<Recipe> results = manager.searchRecipes(query);
-            DefaultListModel<String> model = new DefaultListModel<>();
+            listModel.clear();
             for (Recipe recipe : results) {
-                model.addElement(recipe.getName());
+                listModel.addElement(recipe.getName());
             }
-            resultList.setModel(model);
 
             resultList.addListSelectionListener(event -> {
                 if (!event.getValueIsAdjusting()) {
@@ -47,8 +45,20 @@ public class SearchPanel extends JPanel {
             });
         });
 
-        // Add components to the main SearchPanel
         add(searchTopPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public void removeRecipeFromResults(String recipeName) {
+        if (listModel.contains(recipeName)) {
+            listModel.removeElement(recipeName);
+        }
+    }
+
+    public void updateRecipeInResults(String oldName, String newName) {
+        int index = listModel.indexOf(oldName);
+        if (index != -1) {
+            listModel.set(index, newName);
+        }
     }
 }
