@@ -1,0 +1,36 @@
+package com.recipebook;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SearchService {
+    private List<Recipe> recipes;
+
+    public SearchService(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
+
+    public List<Recipe> searchByKeyword(String keyword) {
+        List<Recipe> results = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            if (recipe.getName().toLowerCase().contains(keyword.toLowerCase()) || 
+                recipe.getTags().toString().toLowerCase().contains(keyword.toLowerCase())) {
+                results.add(recipe);
+            }
+        }
+        return results;
+    }
+
+    public List<Recipe> searchByIngredient(String ingredient) {
+        List<Recipe> results = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            for (String ing : recipe.getIngredients()) {
+                if (ing.toLowerCase().contains(ingredient.toLowerCase())) {
+                    results.add(recipe);
+                    break;
+                }
+            }
+        }
+        return results;
+    }
+}
