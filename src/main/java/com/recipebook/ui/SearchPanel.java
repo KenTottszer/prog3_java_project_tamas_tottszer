@@ -13,6 +13,7 @@ public class SearchPanel extends JPanel {
     public SearchPanel(RecipeManager manager, RecipePanel recipePanel) {
         setLayout(new BorderLayout());
 
+        // Search bar and button
         JPanel searchTopPanel = new JPanel(new BorderLayout());
         JTextField searchField = new JTextField();
         JButton searchButton = new JButton("Search");
@@ -20,6 +21,7 @@ public class SearchPanel extends JPanel {
         searchTopPanel.add(searchField, BorderLayout.CENTER);
         searchTopPanel.add(searchButton, BorderLayout.EAST);
 
+        // Result list
         listModel = new DefaultListModel<>();
         resultList = new JList<>(listModel);
         resultList.setLayoutOrientation(JList.VERTICAL);
@@ -28,25 +30,45 @@ public class SearchPanel extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
+        // Search button functionality
         searchButton.addActionListener(e -> {
-            String query = searchField.getText();
-            List<Recipe> results = manager.searchRecipes(query);
-            listModel.clear();
-            for (Recipe recipe : results) {
-                listModel.addElement(recipe.getName());
+            String query = searchField.getText().trim();
+            if (query.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a search term.", "Search Error", JOptionPane.WARNING_MESSAGE);
+                return;
             }
-
-            resultList.addListSelectionListener(event -> {
-                if (!event.getValueIsAdjusting()) {
-                    String selectedRecipeName = resultList.getSelectedValue();
-                    Recipe selectedRecipe = manager.getRecipe(selectedRecipeName);
-                    recipePanel.displayRecipe(selectedRecipe);
-                }
-            });
+            List<Recipe> results = manager.searchRecipes(query);
+            updateResultList(results);
         });
 
+        // Recipe selection functionality
+        resultList.addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting()) {
+                String selectedRecipeName = resultList.getSelectedValue();
+                Recipe selectedRecipe = manager.getRecipe(selectedRecipeName);
+                recipePanel.displayRecipe(selectedRecipe);
+            }
+        });
+
+        // "Show All Recipes" button
+        JButton showAllButton = new JButton("Show All Recipes");
+        showAllButton.addActionListener(e -> {
+            List<Recipe> allRecipes = manager.getAllRecipes();
+            updateResultList(allRecipes);
+        });
+
+        // Add components to the SearchPanel
         add(searchTopPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+        add(showAllButton, BorderLayout.SOUTH);
+    }
+
+    // Update the JList with a new list of recipes
+    private void updateResultList(List<Recipe> recipes) {
+        listModel.clear();
+        for (Recipe recipe : recipes) {
+            listModel.addElement(recipe.getName());
+        }
     }
 
     public void removeRecipeFromResults(String recipeName) {
