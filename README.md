@@ -17,6 +17,7 @@ PROG3_JAVA_PROJECT_TAMAS_TOTTSZER/
 │   │   │           └── ui/                      # User Interface classes
 │   │   │               ├── MainFrame.java       # Main GUI frame
 │   │   │               ├── RecipePanel.java     # Panel for displaying recipe details
+                        ├── EditRecipeDialog.java 
 │   │   │               ├── AddRecipeDialog.java # Dialog for adding/editing recipes
 │   │   │               └── SearchPanel.java     # Panel for searching recipes
 │   └── test/                      # Test code directory

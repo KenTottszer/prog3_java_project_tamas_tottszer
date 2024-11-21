@@ -1,13 +1,16 @@
 package com.recipebook.ui;
 
 import javax.swing.*;
+import javax.swing.WindowConstants;
 import java.awt.*;
 import com.recipebook.Recipe;
 import com.recipebook.RecipeManager;
 import com.recipebook.RecipeSerialiser;
 
 public class MainFrame extends JFrame {
-    private RecipeManager recipeManager;
+    private static final String DELETE_RECIPE = "Delete Recipe";
+
+    private transient RecipeManager recipeManager;
     private RecipePanel recipePanel;
     private SearchPanel searchPanel;
 
@@ -16,7 +19,7 @@ public class MainFrame extends JFrame {
         setTitle("Digital Recipe Book");
         setSize(800, 600);
         setMinimumSize(new Dimension(800, 600));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Create panels
@@ -31,9 +34,9 @@ public class MainFrame extends JFrame {
         add(splitPane, BorderLayout.CENTER);
 
         // Dynamically set divider location after rendering
-        SwingUtilities.invokeLater(() -> {
-            splitPane.setDividerLocation((int) (getWidth() * 0.65)); // Set divider to 65% of frame width
-        });
+        SwingUtilities.invokeLater(() -> 
+            splitPane.setDividerLocation((int) (getWidth() * 0.65)) // Set divider to 65% of frame width
+        );
 
         // Bottom toolbar with buttons
         JPanel bottomToolbar = new JPanel(new GridBagLayout());
@@ -48,7 +51,7 @@ public class MainFrame extends JFrame {
         editRecipeButton.setPreferredSize(new Dimension(150, 40));
         editRecipeButton.addActionListener(e -> openEditRecipeDialog());
 
-        JButton deleteRecipeButton = new JButton("Delete Recipe");
+        JButton deleteRecipeButton = new JButton(DELETE_RECIPE);
         deleteRecipeButton.setPreferredSize(new Dimension(150, 40));
         deleteRecipeButton.addActionListener(e -> deleteSelectedRecipe());
 
@@ -107,16 +110,16 @@ public class MainFrame extends JFrame {
     private void deleteSelectedRecipe() {
         String selectedRecipeName = recipePanel.getSelectedRecipeName();
         if (selectedRecipeName == null) {
-            JOptionPane.showMessageDialog(this, "Please select a recipe to delete.", "Delete Recipe", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a recipe to delete.", DELETE_RECIPE, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected recipe?", DELETE_RECIPE, JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             recipeManager.deleteRecipe(selectedRecipeName);
             searchPanel.removeRecipeFromResults(selectedRecipeName); // Remove from SearchPanel dynamically
             recipePanel.refresh();
-            JOptionPane.showMessageDialog(this, "Recipe deleted successfully.", "Delete Recipe", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Recipe deleted successfully.", DELETE_RECIPE, JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

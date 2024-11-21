@@ -11,6 +11,10 @@ public class SearchService {
     }
 
     public List<Recipe> searchByKeyword(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return new ArrayList<>(); // Return empty list for empty or null keyword
+        }
+
         List<Recipe> results = new ArrayList<>();
         for (Recipe recipe : recipes) {
             if (recipe.getName().toLowerCase().contains(keyword.toLowerCase()) || 
@@ -22,6 +26,10 @@ public class SearchService {
     }
 
     public List<Recipe> searchByIngredient(String ingredient) {
+        if (ingredient == null || ingredient.trim().isEmpty()) {
+            return new ArrayList<>(); // Return empty list for empty or null ingredient
+        }
+
         List<Recipe> results = new ArrayList<>();
         for (Recipe recipe : recipes) {
             for (String ing : recipe.getIngredients()) {

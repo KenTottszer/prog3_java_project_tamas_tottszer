@@ -3,8 +3,16 @@ package com.recipebook;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 
 public class RecipeSerialiser {
+
+    private RecipeSerialiser() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+    
+    private static final Logger logger = Logger.getLogger(RecipeSerialiser.class.getName());
 
     private static final String DEFAULT_FILE_PATH = "data/recipes.ser";
 
@@ -12,21 +20,35 @@ public class RecipeSerialiser {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
             out.writeObject(recipes);
         } catch (IOException e) {
-            System.err.println("Error saving recipes: " + e.getMessage());
+            logger.severe("Error saving recipes: " + e.getMessage());
         }
     }
 
     public static List<Recipe> loadRecipes(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) {
-            System.out.println("No recipes found. Initializing empty recipe collection.");
+            logger.info("No recipes found. Initializing empty recipe collection.");
             return new ArrayList<>();
         }
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            return (List<Recipe>) in.readObject();
+            Object obj = in.readObject();
+            if (obj instanceof List<?>) {
+                List<?> rawList = (List<?>) obj;
+                List<Recipe> recipeList = new ArrayList<>();
+                for (Object item : rawList) {
+                    if (item instanceof Recipe) {
+                        recipeList.add((Recipe) item);
+                    } else {
+                        throw new IOException("List contains non-Recipe elements");
+                    }
+                }
+                return recipeList;
+            } else {
+                throw new IOException("Unexpected data format");
+            }
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading recipes: " + e.getMessage());
+            logger.severe("Error loading recipes: " + e.getMessage());
             return new ArrayList<>();
         }
     }

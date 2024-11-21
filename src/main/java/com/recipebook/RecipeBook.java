@@ -2,9 +2,10 @@ package com.recipebook;
 
 import javax.swing.SwingUtilities;
 import com.recipebook.ui.MainFrame;
+import java.util.logging.Logger;
 
 public class RecipeBook {
-
+    private static final Logger logger = Logger.getLogger(RecipeBook.class.getName());
     public static void main(String[] args) {
         // Load recipes from the serialized file
         RecipeManager manager = new RecipeManager();
@@ -12,10 +13,10 @@ public class RecipeBook {
         manager.getAllRecipes().addAll(RecipeSerialiser.loadRecipes(filePath));
 
         // Initialize and display the GUI
-        SwingUtilities.invokeLater(() -> {
-            new MainFrame(manager);
-        });
+        SwingUtilities.invokeLater(() -> 
+            new MainFrame(manager)
+        );
 
-        System.out.println("Welcome to the Digital Recipe Book!");
+        logger.info("Welcome to the Digital Recipe Book!");
     }
 }
