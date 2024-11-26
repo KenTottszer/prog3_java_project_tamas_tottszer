@@ -36,7 +36,7 @@ To run the application, ensure you have the following installed:
 ### Clone the Repository
 Clone this repository to your local machine:
 
-git clone https://github.com/<your-repository-link>/prog3_java_project_tamas_tottszer.git
+git clone https://github.com/your-username/prog3_java_project_tamas_tottszer.git
 
 
 ### Build the Project
