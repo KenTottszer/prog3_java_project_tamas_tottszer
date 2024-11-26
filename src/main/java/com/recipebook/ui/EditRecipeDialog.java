@@ -11,20 +11,18 @@ public class EditRecipeDialog extends JDialog {
     public EditRecipeDialog(JFrame parent, RecipeManager manager, Recipe recipe) {
         super(parent, "Edit Recipe", true);
 
-        // Set size dynamically based on screen dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int dialogWidth = screenSize.width / 2;
         int dialogHeight = screenSize.height / 2;
         setSize(dialogWidth, dialogHeight);
 
-        // Set dialog location to the right side of the screen
-        int x = screenSize.width - dialogWidth - 50; // Leave some margin from the right edge
-        int y = (screenSize.height - dialogHeight) / 2; // Center vertically
+        int x = screenSize.width - dialogWidth - 50; 
+        int y = (screenSize.height - dialogHeight) / 2; 
         setLocation(x, y);
 
-        // Wrap content with a border for padding
-        JPanel contentPanel = new JPanel(new GridLayout(5, 2, 10, 10)); // Add spacing between rows and columns
-        contentPanel.setBorder(new EmptyBorder(15, 15, 15, 15)); // Add padding around the panel
+
+        JPanel contentPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        contentPanel.setBorder(new EmptyBorder(15, 15, 15, 15)); 
 
         JTextField nameField = new JTextField(recipe.getName());
         JTextArea ingredientsArea = new JTextArea(String.join(",", recipe.getIngredients()));
@@ -51,7 +49,7 @@ public class EditRecipeDialog extends JDialog {
             dispose();
         });
 
-        contentPanel.add(new JLabel()); // Empty placeholder for alignment
+        contentPanel.add(new JLabel());
         contentPanel.add(saveButton);
 
         setLayout(new BorderLayout());

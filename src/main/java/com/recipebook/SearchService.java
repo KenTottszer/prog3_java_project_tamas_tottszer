@@ -12,7 +12,7 @@ public class SearchService {
 
     public List<Recipe> searchByKeyword(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return new ArrayList<>(); // Return empty list for empty or null keyword
+            return new ArrayList<>(); 
         }
 
         List<Recipe> results = new ArrayList<>();
@@ -27,7 +27,7 @@ public class SearchService {
 
     public List<Recipe> searchByIngredient(String ingredient) {
         if (ingredient == null || ingredient.trim().isEmpty()) {
-            return new ArrayList<>(); // Return empty list for empty or null ingredient
+            return new ArrayList<>();
         }
 
         List<Recipe> results = new ArrayList<>();

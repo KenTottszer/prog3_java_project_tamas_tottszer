@@ -6,7 +6,7 @@ import java.util.List;
 public class Recipe implements Serializable {
     private String name;
     private List<String> ingredients;
-    private String instructions; // Change from List<String> to String
+    private String instructions; 
     private List<String> tags;
 
     public Recipe(String name, List<String> ingredients, String instructions, List<String> tags) {
@@ -23,6 +23,6 @@ public class Recipe implements Serializable {
 
     public void setName(String name) { this.name = name; }
     public void setIngredients(List<String> ingredients) { this.ingredients = ingredients; }
-    public void setInstructions(String instructions) { this.instructions = instructions; } // Update setter
+    public void setInstructions(String instructions) { this.instructions = instructions; } 
     public void setTags(List<String> tags) { this.tags = tags; }
 }

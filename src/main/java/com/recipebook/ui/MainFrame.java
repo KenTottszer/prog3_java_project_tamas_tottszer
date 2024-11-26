@@ -22,7 +22,6 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Create panels
         recipePanel = new RecipePanel();
         searchPanel = new SearchPanel(recipeManager, recipePanel);
 
@@ -30,15 +29,13 @@ public class MainFrame extends JFrame {
         searchPanel.setMinimumSize(new Dimension(300, 600));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, recipePanel, searchPanel);
-        splitPane.setResizeWeight(0.65); // Set resizing weight
+        splitPane.setResizeWeight(0.65);
         add(splitPane, BorderLayout.CENTER);
 
-        // Dynamically set divider location after rendering
         SwingUtilities.invokeLater(() -> 
-            splitPane.setDividerLocation((int) (getWidth() * 0.65)) // Set divider to 65% of frame width
+            splitPane.setDividerLocation((int) (getWidth() * 0.65)) 
         );
 
-        // Bottom toolbar with buttons
         JPanel bottomToolbar = new JPanel(new GridBagLayout());
         bottomToolbar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottomToolbar.setBackground(Color.LIGHT_GRAY);
@@ -100,7 +97,6 @@ public class MainFrame extends JFrame {
             EditRecipeDialog dialog = new EditRecipeDialog(this, recipeManager, selectedRecipe);
             dialog.setVisible(true);
 
-            // Update search panel and recipe panel dynamically
             String updatedRecipeName = selectedRecipe.getName();
             searchPanel.updateRecipeInResults(selectedRecipeName, updatedRecipeName);
             recipePanel.displayRecipe(selectedRecipe);
@@ -117,7 +113,7 @@ public class MainFrame extends JFrame {
         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected recipe?", DELETE_RECIPE, JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             recipeManager.deleteRecipe(selectedRecipeName);
-            searchPanel.removeRecipeFromResults(selectedRecipeName); // Remove from SearchPanel dynamically
+            searchPanel.removeRecipeFromResults(selectedRecipeName);
             recipePanel.refresh();
             JOptionPane.showMessageDialog(this, "Recipe deleted successfully.", DELETE_RECIPE, JOptionPane.INFORMATION_MESSAGE);
         }

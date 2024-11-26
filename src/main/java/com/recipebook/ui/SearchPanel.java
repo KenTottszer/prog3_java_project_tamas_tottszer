@@ -13,7 +13,6 @@ public class SearchPanel extends JPanel {
     public SearchPanel(RecipeManager manager, RecipePanel recipePanel) {
         setLayout(new BorderLayout());
 
-        // Search bar and button
         JPanel searchTopPanel = new JPanel(new BorderLayout());
         JTextField searchField = new JTextField();
         JButton searchButton = new JButton("Search");
@@ -21,7 +20,6 @@ public class SearchPanel extends JPanel {
         searchTopPanel.add(searchField, BorderLayout.CENTER);
         searchTopPanel.add(searchButton, BorderLayout.EAST);
 
-        // Result list
         listModel = new DefaultListModel<>();
         resultList = new JList<>(listModel);
         resultList.setLayoutOrientation(JList.VERTICAL);
@@ -30,7 +28,6 @@ public class SearchPanel extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // Search button functionality
         searchButton.addActionListener(e -> {
             String query = searchField.getText().trim();
             if (query.isEmpty()) {
@@ -41,7 +38,6 @@ public class SearchPanel extends JPanel {
             updateResultList(results);
         });
 
-        // Recipe selection functionality
         resultList.addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting()) {
                 String selectedRecipeName = resultList.getSelectedValue();
@@ -50,20 +46,18 @@ public class SearchPanel extends JPanel {
             }
         });
 
-        // "Show All Recipes" button
         JButton showAllButton = new JButton("Show All Recipes");
         showAllButton.addActionListener(e -> {
             List<Recipe> allRecipes = manager.getAllRecipes();
             updateResultList(allRecipes);
         });
 
-        // Add components to the SearchPanel
         add(searchTopPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(showAllButton, BorderLayout.SOUTH);
     }
 
-    // Update the JList with a new list of recipes
+
     private void updateResultList(List<Recipe> recipes) {
         listModel.clear();
         for (Recipe recipe : recipes) {

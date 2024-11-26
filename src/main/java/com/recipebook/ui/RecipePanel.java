@@ -6,7 +6,7 @@ import com.recipebook.Recipe;
 
 public class RecipePanel extends JPanel {
     private JTextArea recipeDetails;
-    private String selectedRecipeName; // Store the name of the selected recipe
+    private String selectedRecipeName;
 
     public RecipePanel() {
         setLayout(new BorderLayout());
@@ -23,13 +23,13 @@ public class RecipePanel extends JPanel {
 
     public void displayRecipe(Recipe recipe) {
         if (recipe != null) {
-            selectedRecipeName = recipe.getName(); // Track the selected recipe name
+            selectedRecipeName = recipe.getName();
             recipeDetails.setText("Name: " + recipe.getName() + "\n\n" +
                                   "Ingredients:\n" + String.join(", ", recipe.getIngredients()) + "\n\n" +
                                   "Instructions:\n" + recipe.getInstructions() + "\n\n" +
                                   "Tags:\n" + String.join(", ", recipe.getTags()));
         } else {
-            selectedRecipeName = null; // Clear the selection if no recipe is selected
+            selectedRecipeName = null;
             recipeDetails.setText("No recipe selected.");
         }
     }
