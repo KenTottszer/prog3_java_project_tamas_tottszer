@@ -70,23 +70,23 @@ When you run the application, a GUI window titled **"Digital Recipe Book"** will
    - Click "Save" to add the recipe to your collection.
 
 2. **Edit a Recipe**:
-   - Select a recipe from the list in the **Search Panel**.
+   - Select a recipe from the list in the Search Panel.
    - Click the "Edit Recipe" button in the toolbar.
    - Modify the recipe details in the popup dialog.
    - Click "Save" to update the recipe.
 
 3. **Delete a Recipe**:
-   - Select a recipe from the list in the **Search Panel**.
+   - Select a recipe from the list in the Search Panel.
    - Click the "Delete Recipe" button in the toolbar.
    - Confirm the deletion when prompted.
 
 4. **Search Recipes**:
-   - Enter a keyword or ingredient in the search bar at the top of the **Search Panel**.
+   - Enter a keyword or ingredient in the search bar at the top of the Search Panel.
    - Click the "Search" button to filter recipes.
    - Matching recipes will be displayed in the list below.
 
 5. **View All Recipes**:
-   - Click the "Show All Recipes" button at the bottom of the **Search Panel** to display all saved recipes.
+   - Click the "Show All Recipes" button at the bottom of the Search Panel to display all saved recipes.
 
 6. **Save Recipes**:
    - Click the "Save Recipes" button in the toolbar to save your recipes to a file.
@@ -104,11 +104,6 @@ When the application starts, it will automatically load recipes from the default
 - **JUnit 5**: For unit testing.
 - **Maven**: For dependency management and build automation.
 - **Java Serialization**: For saving and loading recipes.
-
----
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
